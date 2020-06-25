@@ -1,9 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TaskDialog extends StatelessWidget {
+class AddTaskScreen extends StatelessWidget {
+
+  AddTaskScreen(this.addTaskCallback);
+  final Function addTaskCallback;
+
   @override
   Widget build(BuildContext context) {
+
+    String newTaskTitle;
+
     return Container(
       color: Color(0xff757575),
       child: Container(
@@ -28,6 +35,8 @@ class TaskDialog extends StatelessWidget {
              TextField(
                autofocus: true,
                textAlign: TextAlign.center,
+               autocorrect: true,
+               textCapitalization: TextCapitalization.sentences,
                style: TextStyle(fontSize: 20.0),
                decoration: InputDecoration(
                  focusedBorder: UnderlineInputBorder(
@@ -35,6 +44,9 @@ class TaskDialog extends StatelessWidget {
                  )
                ),
                cursorColor: Colors.grey[500],
+               onChanged: (value){
+                 newTaskTitle = value;
+               },
              ),
              SizedBox(height: 20.0,),
              RaisedButton(
@@ -45,7 +57,8 @@ class TaskDialog extends StatelessWidget {
                ),
                color: Color(0xff1a1a1a),
                onPressed: (){
-                 print('ok');
+                  addTaskCallback(newTaskTitle);
+                  Navigator.pop(context);
                },
              )
             ],
