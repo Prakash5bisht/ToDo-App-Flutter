@@ -1,29 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do/models/task_data.dart';
 import 'package:to_do/widgets/task_list.dart';
-import 'package:to_do/screens/task_dialog.dart';
-import 'package:to_do/models/Task.dart';
-
-class TasksScreen extends StatefulWidget {
+import 'package:to_do/screens/add_task_screen.dart';
 
 
-  @override
-  _TasksScreenState createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-
-  List<Task> tasks = [
-//    Task(name: 'milk'),
-//    Task(name: 'eggs'),
-//    Task(name: 'vinegar'),
-//    Task(name: 'olive oil'),
-//    Task(name: 'olive oil'),
-//    Task(name: 'olive oil'),
-//    Task(name: 'olive oil'),
-//    Task(name: 'olive oil'),
-  ];
-
+class TasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +24,7 @@ class _TasksScreenState extends State<TasksScreen> {
               builder: (BuildContext context) => SingleChildScrollView(
                 child: Container(
                   padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: AddTaskScreen((newTaskTitle){
-                    setState(() {
-                    tasks.add(Task(name: newTaskTitle));
-                    });
-                  }),
+                  child: AddTaskScreen(),
                 ),
               ));
         },
@@ -66,7 +45,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                   SizedBox(height: 20.0,),
                   Text(
-                    '${tasks.length} tasks',
+                    '${Provider.of<TaskData>(context).taskCount} tasks',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
@@ -79,12 +58,12 @@ class _TasksScreenState extends State<TasksScreen> {
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.only(top: 20.0,left: 20.0,right: 20.0,bottom: 70.0),
+                padding: EdgeInsets.only(top: 20.0,left: 12.0,right: 12.0,bottom: 70.0),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(25.0),topRight: Radius.circular(25.0))
                 ),
-                child: TaskList(tasks,tasks.length),
+                child: TaskList(),
               ),
             ),
           ],

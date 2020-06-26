@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do/models/task_data.dart';
+
+
+String _newTaskTitle = '';
 
 class AddTaskScreen extends StatelessWidget {
-
-  AddTaskScreen(this.addTaskCallback);
-  final Function addTaskCallback;
-
   @override
   Widget build(BuildContext context) {
-
-    String newTaskTitle;
-
     return Container(
       color: Color(0xff757575),
       child: Container(
@@ -36,6 +34,7 @@ class AddTaskScreen extends StatelessWidget {
                autofocus: true,
                textAlign: TextAlign.center,
                autocorrect: true,
+               maxLength: 25,
                textCapitalization: TextCapitalization.sentences,
                style: TextStyle(fontSize: 20.0),
                decoration: InputDecoration(
@@ -45,7 +44,7 @@ class AddTaskScreen extends StatelessWidget {
                ),
                cursorColor: Colors.grey[500],
                onChanged: (value){
-                 newTaskTitle = value;
+                 _newTaskTitle = value;
                },
              ),
              SizedBox(height: 20.0,),
@@ -57,8 +56,7 @@ class AddTaskScreen extends StatelessWidget {
                ),
                color: Color(0xff1a1a1a),
                onPressed: (){
-                  addTaskCallback(newTaskTitle);
-                  Navigator.pop(context);
+                 _newTaskTitle == '' ?  _showDialog(context) :  addTasksToList(context) ;
                },
              )
             ],
@@ -66,5 +64,30 @@ class AddTaskScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _showDialog(BuildContext context) {
+    showDialog(
+     context: context,
+      builder: (context){
+       return AlertDialog(
+         content: Text('cannot create empty task'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('ok'),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
+        ],
+       );
+      }
+    );
+  }
+
+ void addTasksToList(context) {
+    Provider.of<TaskData>(context,listen: false).addTask(_newTaskTitle);
+    _newTaskTitle = '';
+    Navigator.pop(context);
   }
 }
